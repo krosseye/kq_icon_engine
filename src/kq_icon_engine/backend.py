@@ -196,15 +196,13 @@ class _IconLibrary:
                 return []
 
             icons: Set[str] = set()
-            suffix = f"-{style.value}"
-
             try:
                 for file in style_dir.iterdir():
                     if file.suffix.lower() == ".svg":
                         name = file.stem
                         # Normalize the icon name by removing the style suffix if present
-                        if style != IconStyle.REGULAR and name.endswith(suffix):
-                            name = name[: -len(suffix)]
+                        if style != IconStyle.REGULAR:
+                            name = name.removesuffix(f"-{style.value}")
                         icons.add(name)
             except OSError as e:
                 logging.error(
