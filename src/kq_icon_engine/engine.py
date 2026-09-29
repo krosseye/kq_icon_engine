@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Optional, Tuple
 
 from PySide6.QtCore import QRect, QSize
 from PySide6.QtGui import (
@@ -20,7 +19,7 @@ class _KQBaseIconEngine(QIconEngine):
     """Base engine for SVG processing."""
 
     def __init__(
-        self, color: Optional[QColor] = None, fill: FillMode = FillMode.FLAT
+        self, color: QColor | None = None, fill: FillMode = FillMode.FLAT
     ) -> None:
         super().__init__()
         self.color = color
@@ -35,8 +34,8 @@ class _KQBaseIconEngine(QIconEngine):
         raise NotImplementedError
 
     def _resolve(
-        self, mode: QIcon.Mode, state: QIcon.State, dpr: Optional[float] = None
-    ) -> Tuple[Path, QColor, float, FillMode]:
+        self, mode: QIcon.Mode, state: QIcon.State, dpr: float | None = None
+    ) -> tuple[Path, QColor, float, FillMode]:
         """Resolves icon parameters for the current context.
 
         Args:
@@ -123,7 +122,7 @@ class KQIconEngine(_KQBaseIconEngine):
     def __init__(
         self,
         icon_name: str,
-        color: Optional[QColor] = None,
+        color: QColor | None = None,
         style: IconStyle = IconStyle.REGULAR,
         fill: FillMode = FillMode.FLAT,
     ) -> None:
@@ -166,7 +165,7 @@ class KQCustomIconEngine(_KQBaseIconEngine):
     def __init__(
         self,
         icon_path: Path,
-        color: Optional[QColor] = None,
+        color: QColor | None = None,
         fill: FillMode = FillMode.FLAT,
     ) -> None:
         super().__init__(color, fill)
@@ -206,7 +205,7 @@ class KQIcon(QIcon):
     def __init__(
         self,
         icon_name: str,
-        color: Optional[QColor] = None,
+        color: QColor | None = None,
         style: IconStyle = IconStyle.REGULAR,
         fill: FillMode = FillMode.FLAT,
     ) -> None:
@@ -227,7 +226,7 @@ class KQCustomIcon(QIcon):
     def __init__(
         self,
         svg_icon_path: Path,
-        color: Optional[QColor] = None,
+        color: QColor | None = None,
         fill: FillMode = FillMode.FLAT,
     ) -> None:
         """Initializes the icon with a file path.

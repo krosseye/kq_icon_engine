@@ -2,7 +2,6 @@ import logging
 import threading
 from collections import OrderedDict
 from pathlib import Path
-from typing import Dict, Optional, Set, Tuple
 
 from PySide6.QtCore import QRect, QRectF, QSize, Qt
 from PySide6.QtGui import (
@@ -16,11 +15,13 @@ from PySide6.QtSvg import QSvgRenderer
 
 from .types import FillMode, IconStyle
 
+LOGGER = logging.getLogger()
+
 
 class _IconRenderer:
     """Handles SVG rendering and caching of pixmaps."""
 
-    _pixmap_cache: OrderedDict[Tuple[Path, int, int, float, int, FillMode], QPixmap] = (
+    _pixmap_cache: OrderedDict[tuple[Path, int, int, float, int, FillMode], QPixmap] = (
         OrderedDict()
     )
 
@@ -129,14 +130,14 @@ class _IconRenderer:
 class _IconLibrary:
     """Phosphor icon library management."""
 
-    ICONS_DIR: Optional[Path] = None
+    ICONS_DIR: Path | None = None
     DEFAULT_STYLE: IconStyle = IconStyle.REGULAR
     FALLBACK_ICON: str = "question"
 
-    _path_cache: Dict[Tuple[str, IconStyle], Path] = {}
-    _fallback_keys: Set[Tuple[str, IconStyle]] = set()
-    _available_icons_cache: Dict[IconStyle, list[str]] = {}
-    _warned_missing: Set[Tuple[str, IconStyle]] = set()
+    _path_cache: dict[tuple[str, IconStyle], Path] = {}
+    _fallback_keys: set[tuple[str, IconStyle]] = set()
+    _available_icons_cache: dict[IconStyle, list[str]] = {}
+    _warned_missing: set[tuple[str, IconStyle]] = set()
 
     _lock: threading.Lock = threading.Lock()
     _initialised: bool = False
@@ -159,7 +160,7 @@ class _IconLibrary:
         """
         with cls._lock:
             if cls._initialised:
-                logging.warning(
+                LOGGER.warning(
                     "Icon backend already initialised; reinitialising. "
                     "Call setup() only once at application startup."
                 )
@@ -191,31 +192,28 @@ class _IconLibrary:
 
             style_dir = cls.ICONS_DIR / style.value
             if not style_dir.is_dir():
-                logging.warning("Icon style directory '%s' not found.", style_dir)
+                LOGGER.warning("Icon style directory '%s' not found.", style_dir)
                 cls._available_icons_cache[style] = []
                 return []
 
-            icons: Set[str] = set()
+            icons: set[str] = set()
             try:
                 for file in style_dir.iterdir():
                     if file.suffix.lower() == ".svg":
                         name = file.stem
-                        # Normalize the icon name by removing the style suffix if present
                         if style != IconStyle.REGULAR:
                             name = name.removesuffix(f"-{style.value}")
                         icons.add(name)
             except OSError as e:
-                logging.error(
-                    "Failed to index icons for style '%s': %s", style.value, e
-                )
+                LOGGER.error("Failed to index icons for style '%s': %s", style.value, e)
                 cls._available_icons_cache[style] = []
                 return []
 
-            cls._available_icons_cache[style] = sorted(list(icons))
+            cls._available_icons_cache[style] = sorted(icons)
             return list(cls._available_icons_cache[style])
 
     @classmethod
-    def resolve_path(cls, icon_name: str, style: Optional[IconStyle]) -> Path:
+    def resolve_path(cls, icon_name: str, style: IconStyle | None) -> Path:
         """Resolves the file path for an icon.
 
         Checks for file existence directly if the path is not cached,
@@ -245,7 +243,7 @@ class _IconLibrary:
 
         with cls._lock:
             if cache_key not in cls._warned_missing:
-                logging.warning(
+                LOGGER.warning(
                     "Icon '%s' not found in style '%s'. Using fallback '%s'.",
                     icon_name,
                     style_key.value,
@@ -266,7 +264,7 @@ class _IconLibrary:
                 cls._path_cache[cache_key] = fallback_path
             return fallback_path
 
-        logging.error(
+        LOGGER.error(
             "Fallback icon '%s' missing at %s", cls.FALLBACK_ICON, fallback_path
         )
         return Path()

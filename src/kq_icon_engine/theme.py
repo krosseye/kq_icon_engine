@@ -1,5 +1,3 @@
-from typing import Optional
-
 from PySide6.QtGui import (
     QColor,
     QGuiApplication,
@@ -24,7 +22,7 @@ class ThemeManager:
     @classmethod
     def resolve_icon_color(
         cls,
-        base_color: Optional[QColor],
+        base_color: QColor | None,
         mode: QIcon.Mode,
         state: QIcon.State,
     ) -> QColor:
