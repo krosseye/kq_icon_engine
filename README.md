@@ -1,5 +1,8 @@
 # KQIcon Engine
 
+![Tests Status](https://github.com/krosseye/kq_icon_engine/actions/workflows/tests.yml/badge.svg)
+![Build and Release Status](https://github.com/krosseye/kq_icon_engine/actions/workflows/release.yml/badge.svg)
+
 Phosphor icons for PySide6 applications.
 
 ## Installation
