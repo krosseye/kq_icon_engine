@@ -2,6 +2,7 @@ import logging
 import math
 from collections import OrderedDict
 from pathlib import Path
+from typing import ClassVar
 
 from PySide6.QtCore import QRect, QRectF, QSize, Qt
 from PySide6.QtGui import (
@@ -34,9 +35,9 @@ class _IconRenderer:
 
     _MAX_PIXMAP_CACHE_SIZE: int = 128
 
-    _pixmap_cache: OrderedDict[tuple[Path, int, int, float, int, FillMode], QPixmap] = (
-        OrderedDict()
-    )
+    _pixmap_cache: ClassVar[
+        OrderedDict[tuple[Path, int, int, float, int, FillMode], QPixmap]
+    ] = OrderedDict()
 
     @classmethod
     def get_pixmap(
@@ -117,8 +118,8 @@ class _IconRenderer:
 class _IconLibrary:
     """Phosphor icon library management."""
 
-    _path_cache: dict[tuple[str, IconStyle], Path] = {}
-    _available_icons_cache: dict[IconStyle, list[str]] = {}
+    _path_cache: ClassVar[dict[tuple[str, IconStyle], Path]] = {}
+    _available_icons_cache: ClassVar[dict[IconStyle, list[str]]] = {}
 
     @classmethod
     def get_available_icons(cls, style: IconStyle) -> list[str]:
