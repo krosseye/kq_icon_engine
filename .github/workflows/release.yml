@@ -41,14 +41,20 @@ jobs:
         run: uv sync --all-extras
 
       - name: Create release version
+        id: release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: uv run semantic-release version --push --vcs-release --changelog
+        run: |
+          uv run semantic-release version --push --vcs-release --changelog
+          # HEAD only gets a tag when a new version was released (docs/chore commits don't bump)
+          if [ -n "$(git tag --points-at HEAD)" ]; then echo "released=true" >> "$GITHUB_OUTPUT"; fi
 
       - name: Build distribution
+        if: steps.release.outputs.released == 'true'
         run: uv build
 
       - name: Publish distribution
+        if: steps.release.outputs.released == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: uv run semantic-release publish
