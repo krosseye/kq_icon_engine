@@ -72,7 +72,7 @@ icon = KQIcon("star", fill=FillMode.GRADIENT)
 
 ## License
 
-Distributed under the [MIT License](license).
+Distributed under the [MIT License](LICENSE).
 Bundled [Phosphor Icons](https://phosphoricons.com) are also licensed under the MIT License.
 
 *Copyright © 2026 [Killian W (krosseye)](https://github.com/krosseye).*
