@@ -69,11 +69,23 @@ class _IconRenderer:
             cls._pixmap_cache.move_to_end(key)
             return cls._pixmap_cache[key]
 
+        pixmap = cls._render(icon_path, size, dpr, color, fill)
+
+        cls._pixmap_cache[key] = pixmap
+        if len(cls._pixmap_cache) > cls._MAX_PIXMAP_CACHE_SIZE:
+            cls._pixmap_cache.popitem(last=False)
+
+        return pixmap
+
+    @staticmethod
+    def _render(
+        icon_path: Path, size: QSize, dpr: float, color: QColor, fill: FillMode
+    ) -> QPixmap:
+        """Renders the recolored SVG; returns a null pixmap if the SVG is invalid."""
         renderer = QSvgRenderer(icon_path.as_posix())
         if not renderer.isValid():
             LOGGER.error("Invalid SVG: %s", icon_path)
-            cls._pixmap_cache[key] = QPixmap()
-            return cls._pixmap_cache[key]
+            return QPixmap()
 
         image = QImage(
             math.ceil(size.width() * dpr),
@@ -107,11 +119,6 @@ class _IconRenderer:
 
         pixmap = QPixmap.fromImage(image)
         pixmap.setDevicePixelRatio(dpr)
-
-        cls._pixmap_cache[key] = pixmap
-        if len(cls._pixmap_cache) > cls._MAX_PIXMAP_CACHE_SIZE:
-            cls._pixmap_cache.popitem(last=False)
-
         return pixmap
 
 
@@ -148,7 +155,7 @@ class _IconLibrary:
             return cls._path_cache[cache_key]
 
         path = _icon_path(icon_name, style)
-        if not path.exists():
+        if icon_name not in cls.get_available_icons(style):
             LOGGER.warning(
                 "Icon '%s' not found in style '%s'. Using fallback '%s'.",
                 icon_name,
