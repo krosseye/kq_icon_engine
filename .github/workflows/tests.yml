@@ -3,7 +3,7 @@ name: Tests
 on:
   push:
     branches:
-      - main
+      # main is tested by release.yml, which calls this workflow before releasing.
       - develop
   pull_request:
     branches:
