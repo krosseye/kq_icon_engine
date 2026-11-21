@@ -66,3 +66,28 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: uv run pytest
+
+  freeze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.11"
+
+      - name: Install project dependencies
+        run: uv sync --locked
+
+      - name: Install Qt system libraries
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1 libxkbcommon0 libfontconfig1 libglib2.0-0
+
+      - name: Freeze and run smoke app
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          uv run pyinstaller --noconfirm --onedir --name freeze_smoke tests/freeze_smoke.py
+          ./dist/freeze_smoke/freeze_smoke
