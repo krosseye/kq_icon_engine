@@ -86,6 +86,7 @@ class _IconRenderer:
         if not renderer.isValid():
             LOGGER.error("Invalid SVG: %s", icon_path)
             return QPixmap()
+        renderer.setAspectRatioMode(Qt.AspectRatioMode.KeepAspectRatio)
 
         image = QImage(
             math.ceil(size.width() * dpr),

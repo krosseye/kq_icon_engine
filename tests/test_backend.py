@@ -150,6 +150,13 @@ class TestIconRenderer:
         pixmap = _IconRenderer.get_pixmap(solid_svg, QSize(40, 10), 1.0, RED)
         assert pixmap.size() == QSize(40, 10)
 
+    def test_non_square_size_keeps_icon_shape(self) -> None:
+        path = _IconLibrary.resolve_path("circle", IconStyle.FILL)
+        image = _IconRenderer.get_pixmap(path, QSize(64, 16), 1.0, RED).toImage()
+        opaque = sum(image.pixelColor(x, 8).alpha() > 200 for x in range(64))
+        assert opaque <= 16
+        assert image.pixelColor(0, 8).alpha() == 0
+
     def test_identical_requests_are_served_from_cache(self, solid_svg: Path) -> None:
         first = _IconRenderer.get_pixmap(solid_svg, QSize(16, 16), 1.0, RED)
         solid_svg.write_text("<svg broken", encoding="utf-8")
