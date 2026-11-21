@@ -26,6 +26,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref_name }}
 
+      # Release exactly the commit that passed tests
       - name: Force branch to workflow commit
         run: git reset --hard ${{ github.sha }}
 
