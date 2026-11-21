@@ -44,3 +44,4 @@ dev = [
 version_toml = ["pyproject.toml:project.version"]
 allow_zero_version = true
 major_on_zero = false
+build_command = "uv lock --upgrade-package kq-icon-engine && git add uv.lock"
