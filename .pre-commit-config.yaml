@@ -1,3 +1,5 @@
+exclude: ^src/kq_icon_engine/icons/
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -5,15 +7,21 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
 
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.3
+  - repo: local
     hooks:
       - id: ruff-check
-        args: [ --fix ]
+        name: ruff check
+        entry: uv run ruff check --fix --force-exclude
+        language: system
+        types: [python]
       - id: ruff-format
-
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.18.2
-    hooks:
+        name: ruff format
+        entry: uv run ruff format --force-exclude
+        language: system
+        types: [python]
       - id: mypy
-        args: [ --config-file=pyproject.toml ]
+        name: mypy
+        entry: uv run mypy src
+        language: system
+        pass_filenames: false
+        types: [python]
