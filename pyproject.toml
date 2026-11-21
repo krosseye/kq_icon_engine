@@ -1,6 +1,6 @@
 [project]
 name = "kq-icon-engine"
-version = "0.1.1"
+version = "0.1.2"
 description = "Phosphor icons for PySide6 applications."
 license = "MIT"
 license-files = ["LICENSE", "src/kq_icon_engine/icons/LICENSE"]
