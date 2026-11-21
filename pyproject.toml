@@ -9,7 +9,7 @@ authors = [
   { name = "KROSSEYE", email = "30990184+KROSSEYE@users.noreply.github.com" },
 ]
 requires-python = ">=3.11"
-dependencies = ["pyside6>=6.12.0"]
+dependencies = ["pyside6-essentials>=6.12.0"]
 
 [project.urls]
 Homepage = "https://github.com/krosseye/kq_icon_engine"
