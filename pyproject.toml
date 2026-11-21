@@ -3,13 +3,18 @@ name = "kq-icon-engine"
 version = "0.1.1"
 description = "Phosphor icons for PySide6 applications."
 license = "MIT"
-license-files = ["LICENSE"]
+license-files = ["LICENSE", "src/kq_icon_engine/icons/LICENSE"]
 readme = "README.md"
 authors = [
   { name = "KROSSEYE", email = "30990184+KROSSEYE@users.noreply.github.com" },
 ]
 requires-python = ">=3.11"
 dependencies = ["pyside6>=6.12.0"]
+
+[project.urls]
+Homepage = "https://github.com/krosseye/kq_icon_engine"
+Changelog = "https://github.com/krosseye/kq_icon_engine/blob/main/CHANGELOG.md"
+Issues = "https://github.com/krosseye/kq_icon_engine/issues"
 
 [project.scripts]
 kq-icon-demo = "kq_icon_demo.main:main"
