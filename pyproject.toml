@@ -2,7 +2,8 @@
 name = "kq-icon-engine"
 version = "0.1.1"
 description = "Phosphor icons for PySide6 applications."
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
 readme = "README.md"
 authors = [
   { name = "KROSSEYE", email = "30990184+KROSSEYE@users.noreply.github.com" },
