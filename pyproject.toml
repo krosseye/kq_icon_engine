@@ -19,6 +19,9 @@ Issues = "https://github.com/krosseye/kq_icon_engine/issues"
 [project.scripts]
 kq-icon-demo = "kq_icon_demo.main:main"
 
+[project.entry-points.pyinstaller40]
+hook-dirs = "kq_icon_engine.__pyinstaller:get_hook_dirs"
+
 [build-system]
 requires = ["uv_build>=0.8.15,<0.14.0"]
 build-backend = "uv_build"
@@ -33,6 +36,7 @@ dev = [
   "pytest>=8,<10",
   "python-semantic-release>=10.0.0,<11.0.0",
   "ruff>=0.17.0,<1.0.0",
+  "types-pyinstaller>=6.0,<7.0",
 ]
 
 [tool.semantic_release]
